@@ -3,10 +3,11 @@
 
 Steps: modem profiles (profiles/*.txt -> module/profiles/), the sqlite3 tool from the official
 SQLite source (static, arm64, compiled with zig), then the zip (module files, LICENSE, NOTICE and the
-license notices of what sqlite3 contains).
+license notices of what sqlite3 contains) and dist/update.json for Magisk's update check.
 Needs: Python 3.8+, zig (on PATH or in the ZIG environment variable), internet for the first build.
 """
 import hashlib
+import json
 import os
 import re
 import shutil
@@ -17,6 +18,7 @@ import zipfile
 from pathlib import Path
 
 ZIP_NAME = "Pixel-5G-Enabler"
+REPO = "https://github.com/bennybrit/Pixel-5G-Enabler"    # each GitHub release has the zip, update.json, changelog.md
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODULE = os.path.join(ROOT, "module")
 CACHE = os.path.join(ROOT, "build")
@@ -109,6 +111,21 @@ def build_zip():
             z.writestr(name, Path(ROOT, name).read_bytes())
         z.writestr("THIRD-PARTY-NOTICES.txt", notices)
     print(f"built {out} ({os.path.getsize(out)} bytes)")
+    write_update_json(props)
+
+
+def write_update_json(props):
+    """dist/update.json: the Magisk app reads it through module.prop's updateJson, which points at the copy in the
+    latest GitHub release. Upload it with every release, together with the zip and changelog.md (the release notes)."""
+    version = props["version"]
+    download = f"{REPO}/releases/download/v{version}"
+    info = {"version": version, "versionCode": int(props["versionCode"]),
+            "zipUrl": f"{download}/{ZIP_NAME}-{version}.zip", "changelog": f"{download}/changelog.md"}
+    out = os.path.join(ROOT, "dist", "update.json")
+    Path(out).write_text(json.dumps(info, indent=2) + "\n", encoding="utf-8")
+    print(f"wrote {out}")
+    if props.get("updateJson") != f"{REPO}/releases/latest/download/update.json":
+        print("warning: module.prop has no updateJson for this repository: Magisk will not check for updates")
 
 
 if __name__ == "__main__":

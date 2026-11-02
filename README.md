@@ -58,6 +58,7 @@ When you disable or remove the module and reboot, the phone goes back to its own
 - **Low battery use:** the background script uses about 2% of one CPU core while the phone is awake (measured on a
   Pixel 6a), and nothing while the phone sleeps.
 - **Clean disable and removal:** after a reboot the phone uses its own settings again.
+- **Updates in the Magisk app:** a new version shows up as an Update button on the module, with its release notes.
 - **New Pixels work without an update:** the module chooses the modem profile by the phone's modem, not by the phone
   model.
 
@@ -104,7 +105,9 @@ If your network code is not in the default list, add it after the reboot (see
 A SIM that the phone has never seen gets its settings at the next reboot: insert it while the phone is on, wait until
 it shows up in Settings, then reboot. The status line tells you when a reboot is needed.
 
-To update the module, install the new zip the same way and reboot. Your network list is kept.
+**Updates:** from version 1.0.1 on, the Magisk app shows an **Update** button on the module when a new version is
+out. Tap it, then **Install**, and reboot. You can also install a new zip by hand, as above. Either way, your network
+list is kept.
 
 ## Usage
 
@@ -232,7 +235,9 @@ The zip is written to `dist/Pixel-5G-Enabler-<version>.zip`. The build:
 1. turns the modem profiles in `profiles/*.txt` into the files the modem reads,
 2. downloads the official SQLite 3.54.1 source from sqlite.org (only once, checked against a fixed checksum) and
    compiles `sqlite3` for the phone,
-3. writes the zip with the module, the license files and the license notices of what `sqlite3` contains.
+3. writes the zip with the module, the license files and the license notices of what `sqlite3` contains,
+4. writes `dist/update.json`, which the Magisk app reads to offer updates. Each GitHub release carries it, next to the
+   zip and `changelog.md` (the release notes).
 
 The build is reproducible: with zig 0.17.0, `module/bin/sqlite3` always has the SHA-256
 `4eaee027ca70a5dc18168882f9b872277cb6f0cedade01dcf8d1bd32d0ba3bb3`.
