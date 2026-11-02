@@ -1,0 +1,6 @@
+id=pixel-5g-enabler
+name=Pixel 5G Enabler
+version=1.0.0
+versionCode=10000
+author=Benny Brit
+description=5G SA for SIMs of private 4G/5G networks (PLMNs in plmns.conf) on Exynos-modem Pixels: modem profile, VoLTE/VoNR/Wi-Fi calling toggles, 4G/5G switching with the preferred network type.

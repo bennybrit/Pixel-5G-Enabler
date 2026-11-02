@@ -1,0 +1,59 @@
+# Modem profile for the Exynos 5123 modem (platform gs101): Pixel 6, Pixel 6 Pro, Pixel 6a.
+# Each [section] is one step, applied in this order at every modem start. Section = SIM slot scope.
+# Values: integers (hex or decimal), comma-separated for arrays.
+# Only what this module needs is set; everything else keeps the value the modem already has. Do not add "reset"
+# entries or "IMS voice only" as voice domain: both stop the Pixel 6 Pro modem from searching.
+
+[sim1]  # 5G SA + NSA and the NR bands (n48/n77/n78 included)
+UECAPA_REL15_FSULPCC_1_256Q = 0x1
+UECAPA_REL15_FSULPCC_2_256Q = 0x1
+NR.CONFIG.MODE = 0x11
+UECAPA_NR_RF_BAND_FR1_BM = 0xc80a
+UECAPA_NR_RF_BAND_FR2_BM = 0xc00a
+
+[sim1]  # data-centric device: no voice requirement, so 5G SA stays on without IMS voice (TS 24.501 5.5.1.2.2)
+!SAEL3.SAE_UE_OPERATION_MODE = 0x1
+
+[sim2]  # same as the first step, for SIM slot 2
+UECAPA_REL15_FSULPCC_1_256Q_DS = 0x1
+UECAPA_REL15_FSULPCC_2_256Q_DS = 0x1
+DS.NR.CONFIG.MODE = 0x11
+UECAPA_NR_RF_BAND_FR1_BM_DS = 0xc80a
+UECAPA_NR_RF_BAND_FR2_BM_DS = 0xc00a
+
+[sim2]  # same as the second step, for SIM slot 2
+!SAEL3_DS.SAE_UE_OPERATION_MODE = 0x1
+
+[multislot]  # small LTE capability: no LTE carrier aggregation, factory LTE category and release
+UECAPA_REL10_CA_COMB_NUM = 0x0
+UECAPA_UE_CATEGORY = 0x4
+UECAPA_AS_RELEASE = 0x2
+UECAPA_REL12_CATEGORY_DL = 0xff
+UECAPA_REL12_CATEGORY_UL = 0xff
+
+[sim1]  # search NR before LTE (order: NR, LTE, UMTS, GSM)
+OEM_GFEATURE_RAT_ORDER_SEARCH_TBL = 0x40, 0x4, 0x2, 0x1
+OEM_GFEATURE_RAT_ORDER_SEARCH = 0x1
+
+[sim1]  # no regional band tables: with them the SIM's country code limits the bands (US code: no n48/n78 on a 6/6a)
+OEM_GFEATURE_ENABLE_FCC_BANDS = 0x0
+
+[sim2]  # same for SIM slot 2
+OEM_GFEATURE_ENABLE_FCC_BANDS_DS = 0x0
+
+[sim1]  # stock default values of what Google's CBRS profile changes: a 315-010 SIM used on the stock phone first
+        # leaves part of it behind otherwise (seen: opportunistic data and the data-APN flag)
+TCS_GV_OPT_CARRIER_TYPE = 0x0
+id:0x46e02611 = 0x11
+!SAEL3.SAE_VOICE_DOMAIN_PREF = 0x3
+!SAEL3.SIM_OPERATOR_BAND = 0x0
+!SAEL3.DISABLE_DATAAPN_DEACTIVATON = 0x0
+OEM_GFEATURE_IS_FOR_OPPORTUNISTIC_DATA = 0x0
+
+[sim2]  # same for SIM slot 2
+DS_TCS_GV_OPT_CARRIER_TYPE = 0x0
+id:0x754b4d53 = 0x11
+!SAEL3_DS.SAE_VOICE_DOMAIN_PREF = 0x3
+!SAEL3_DS.SIM_OPERATOR_BAND = 0x0
+!SAEL3_DS.DISABLE_DATAAPN_DEACTIVATON = 0x0
+OEM_GFEATURE_IS_FOR_OPPORTUNISTIC_DATA_DS = 0x0

@@ -1,0 +1,22 @@
+# Modem profile for the Exynos 5400 modem: Pixel 9, 9 Pro, 9 Pro XL, 9 Pro Fold (platform zumapro) and Pixel 10,
+# 10 Pro, 10 Pro XL, 10 Pro Fold (platform laguna).
+# Each [section] is one step, applied in this order at every modem start. Section = SIM slot scope.
+# Values: integers (hex or decimal), comma-separated for arrays. Data-centric usage and the 5G SA switch come from
+# Android on this modem (carrier settings of the module), so only the NR mode, the bands and the regional band tables
+# are set here.
+
+[sim1]  # 5G SA + NSA and the NR bands (n48/n77/n78 included)
+NR.CONFIG.MODE = 0x11
+UECAPA_NR_RF_BAND_FR1_BM = 0xc80a
+UECAPA_NR_RF_BAND_FR2_BM = 0xc00a
+
+[sim2]  # the same for SIM slot 2
+DS.NR.CONFIG.MODE = 0x11
+UECAPA_NR_RF_BAND_FR1_BM_DS = 0xc80a
+UECAPA_NR_RF_BAND_FR2_BM_DS = 0xc00a
+
+[sim1]  # no regional band tables: with them the SIM's country code limits the bands
+OEM_GFEATURE_ENABLE_FCC_BANDS = 0x0
+
+[sim2]  # same for SIM slot 2
+OEM_GFEATURE_ENABLE_FCC_BANDS_DS = 0x0

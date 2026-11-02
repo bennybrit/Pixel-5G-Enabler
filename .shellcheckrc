@@ -1,0 +1,13 @@
+# ShellCheck settings: run "shellcheck module/*.sh tests/*.sh" in the repository root.
+# The module scripts run in Android's shell (mksh) and stay POSIX sh.
+shell=sh
+# Checks left out on purpose:
+#   SC2086 SC2046 SC2231  unquoted variables and $(...): paths and values here never contain spaces, and word
+#                         splitting is used on purpose (e.g. "set -- $(...)" splits an answer into fields)
+#   SC1091 SC2034 SC2154  variables shared between scripts: checks.sh is sourced from a path that exists only on the
+#                         phone, and the tests load the module's functions with eval; loop counters that are not read
+#   SC2317                functions that the tests replace or call through eval
+#   SC2015                "A && B || C" is used as "all of these, or else C"
+#   SC2116                "$(echo $list)" joins a list into one line
+#   SC2010 SC2012         the report lists files with ls
+disable=SC2086,SC2046,SC2231,SC1091,SC2034,SC2154,SC2317,SC2015,SC2116,SC2010,SC2012
