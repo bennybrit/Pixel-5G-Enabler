@@ -143,8 +143,15 @@ To use only 5G or only 4G, use the phone's testing menu:
 2. Tap **Phone information**.
 3. In **Set preferred network type**, select **NR only** (5G only) or **LTE only** (4G only).
 
-Some cells do not keep a phone in 5G only mode. When this happens, the module changes the setting to **NR/LTE** (5G
-first, 4G allowed) by itself, and the status line ends with "NR only did not work here: NR first, LTE allowed".
+Some cells do not keep a phone in 5G only mode. This was seen on the Pixel 6, 6 Pro and 6a (Exynos 5123 modem) with
+cells that also ask the phone for its 4G radio capabilities (E-UTRA). In 5G only mode, this modem sends an empty E-UTRA
+part, and such a cell drops the phone a few seconds after each connection. After five failed tries, the modem stops
+trying 5G for 12 minutes.
+
+When this happens, the module changes the setting to **NR/LTE** (5G first, 4G allowed) by itself and makes the phone
+register again. With 4G allowed, the modem sends its complete capabilities, and the phone stays on 5G. The status line
+then ends with "NR only did not work here: NR first, LTE allowed". The module remembers a cell where this happened
+twice, and uses NR/LTE there right away the next time.
 
 ### Status
 
